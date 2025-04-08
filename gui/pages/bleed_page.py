@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel
 from core.bleed import BleedSystem
+from PyQt5.QtCore import QTimer
 
 class BleedPage(QWidget):
     def __init__(self):
@@ -12,11 +13,7 @@ class BleedPage(QWidget):
         title_label.setStyleSheet("font-size: 16px; font-weight: bold;")
         self.layout.addWidget(title_label)
 
-        # Simulate Bleed System
-        self.bleed_system = BleedSystem()
-        self.bleed_system.update()  # Generate initial data
-
-        # Display Bleed System data
+        # Labels for displaying data
         self.temp_lo_label = QLabel()
         self.temp_hi_label = QLabel()
         self.pressure_label = QLabel()
@@ -25,7 +22,14 @@ class BleedPage(QWidget):
         self.layout.addWidget(self.temp_hi_label)
         self.layout.addWidget(self.pressure_label)
 
-        self.update_data()
+        # Simulate Bleed System
+        self.bleed_system = BleedSystem()
+        self.update_data()  # Display initial data
+
+        # Timer for real-time updates
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_data)
+        self.timer.start(1000)  # Update every 1 second
 
     def update_data(self):
         """Update the displayed data with the latest simulation values."""
@@ -34,5 +38,5 @@ class BleedPage(QWidget):
         self.temp_hi_label.setText(f"Temperature HI: {data['Temperature HI']:.1f} °C")
         self.pressure_label.setText(f"Pressure: {data['Pressure']:.1f} PSI")
 
-        # Schedule the next update
+        # Generate new data
         self.bleed_system.update()
