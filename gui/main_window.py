@@ -8,7 +8,7 @@ class ECAMWindow(QMainWindow):
 
         #Create a Tab Widget
         self.tabs = QTabWidget()
-        self.centralWidget(self.tabs)
+        self.setCentralWidget(self.tabs)
 
         #Add tab for different System Pages
         self.eng_tab = QWidget()
